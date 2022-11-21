@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.marceloroldrin.aula.model.entities.GenericEntitie;
 
@@ -25,8 +26,7 @@ public class GenericController<T extends GenericEntitie<ID>, ID, R extends JpaRe
 
     @GetMapping
     protected Iterable<T> findAll() {
-        PageRequest page = PageRequest.of(0 ,3);
-        return jpaRepository.findAll(page);
+        return jpaRepository.findAll();
     }
 
     @GetMapping("/{id}")
@@ -36,12 +36,12 @@ public class GenericController<T extends GenericEntitie<ID>, ID, R extends JpaRe
     }
 
     @PostMapping
-    protected T create(@Valid T arg) {
+    protected T create(@Valid @RequestBody T arg) {
         return arg.getId() == null ? (T) jpaRepository.save(arg) : null;
     }
 
     @PutMapping
-    protected T update(@Valid T arg) {
+    protected T update(@Valid @RequestBody T arg) {
         System.out.println(arg);
         return this.exists(arg.getId()) ? (T) jpaRepository.save(arg) : null;
     }
