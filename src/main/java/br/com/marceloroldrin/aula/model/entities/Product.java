@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "product")
@@ -16,22 +18,26 @@ public class Product implements GenericEntitie<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(length = 50, nullable = false)
     private String title;
-
+    
     @Column(precision = 2, nullable = false)
+    @DecimalMin(value = "0", message = "O valor do produto não pode ser negativo")
     private float price;
-
+    
+    @NotBlank
     @Column(nullable = false)
     private String description;
-
+    
+    @NotBlank
     @Column(nullable = false)
     private String image;
     
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
+    
     public Category getCategory() {
         return category;
     }
