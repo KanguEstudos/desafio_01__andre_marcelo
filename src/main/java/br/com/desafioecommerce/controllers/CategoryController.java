@@ -1,10 +1,10 @@
-package br.com.desafioecommerce.aula.controllers;
+package br.com.desafioecommerce.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.desafioecommerce.aula.model.entities.Category;
-import br.com.desafioecommerce.aula.model.repositories.CategoryRepository;
+import br.com.desafioecommerce.model.entities.Category;
+import br.com.desafioecommerce.model.repositories.CategoryRepository;
 
 
 @RestController

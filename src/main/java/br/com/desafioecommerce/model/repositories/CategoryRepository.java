@@ -1,8 +1,8 @@
-package br.com.desafioecommerce.aula.model.repositories;
+package br.com.desafioecommerce.model.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.desafioecommerce.aula.model.entities.Category;
+import br.com.desafioecommerce.model.entities.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long>  {
     
