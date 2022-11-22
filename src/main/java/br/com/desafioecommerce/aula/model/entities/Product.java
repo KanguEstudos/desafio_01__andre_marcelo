@@ -1,4 +1,4 @@
-package br.com.marceloroldrin.aula.model.entities;
+package br.com.desafioecommerce.aula.model.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package br.com.marceloroldrin.aula;
+package br.com.desafioecommerce.aula;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

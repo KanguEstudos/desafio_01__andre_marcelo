@@ -1,4 +1,4 @@
-package br.com.marceloroldrin.aula.controllers;
+package br.com.desafioecommerce.aula.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import br.com.marceloroldrin.aula.model.entities.GenericEntitie;
+import br.com.desafioecommerce.aula.model.entities.GenericEntitie;
 
 public class GenericController<T extends GenericEntitie<ID>, ID, R extends JpaRepository<T, ID>> {
 

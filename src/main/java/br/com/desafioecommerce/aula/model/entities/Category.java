@@ -1,4 +1,4 @@
-package br.com.marceloroldrin.aula.model.entities;
+package br.com.desafioecommerce.aula.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
