@@ -7,9 +7,10 @@ import java.util.function.Predicate;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,34 +26,41 @@ public class GenericController<T extends GenericEntitie<ID>, ID, R extends JpaRe
     R jpaRepository;
 
     @GetMapping
-    protected Iterable<T> findAll() {
+    protected List<T> findAll() {
         return jpaRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    protected T getById(@PathVariable ID id) {
-        Optional optional = jpaRepository.findById(id);
-        return optional.isPresent() ? (T) optional.get() : null;
+    protected ResponseEntity<T> getById(@PathVariable ID id) {
+        Optional<T> optional = jpaRepository.findById(id);
+        return optional.isPresent() 
+            ? ResponseEntity.status(HttpStatus.OK).body(optional.get()) 
+            : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @PostMapping
-    protected T create(@Valid @RequestBody T arg) {
-        return arg.getId() == null ? (T) jpaRepository.save(arg) : null;
+    protected ResponseEntity<T> create(@Valid @RequestBody T arg) {
+        return this.save(arg.getId() == null, arg);
     }
 
     @PutMapping
-    protected T update(@Valid @RequestBody T arg) {
-        System.out.println(arg);
-        return this.exists(arg.getId()) ? (T) jpaRepository.save(arg) : null;
+    protected ResponseEntity<T> update(@Valid @RequestBody T arg) {
+        return this.save(this.exists(arg.getId()), arg);         
     }
 
-    @DeleteMapping("/{id}")
-    protected String delete(@PathVariable ID id) {
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    protected ResponseEntity<String> delete(@PathVariable ID id) {
+
         if (!this.exists(id)) {
-            return "Não encontrado";
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("{\"status\" : \"NOT FOUND\"}");
         }
+
         jpaRepository.deleteById(id);
-        return "Deletado";
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("{\"status\" : \"OK\"}");
     }
 
     protected List<T> findWhere(Predicate<T> where) {
@@ -64,5 +72,10 @@ public class GenericController<T extends GenericEntitie<ID>, ID, R extends JpaRe
 
     private boolean exists(ID id) {
         return jpaRepository.findById(id).isPresent();
+    }
+
+    private ResponseEntity<T> save(boolean p, T arg) {
+        return p ? ResponseEntity.status(HttpStatus.CREATED).body(jpaRepository.save(arg))
+                 : ResponseEntity.badRequest().build();
     }
 }
